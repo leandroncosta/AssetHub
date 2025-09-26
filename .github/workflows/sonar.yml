@@ -10,9 +10,7 @@ on:
 
 jobs:
     sonar:
-        name: SonarQube Scan
         runs-on: ubuntu-latest
-
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v3
@@ -23,22 +21,12 @@ jobs:
                   distribution: temurin
                   java-version: '17'
 
-            - name: Cache SonarQube packages
-              uses: actions/cache@v3
-              with:
-                  path: ~/.sonar/cache
-                  key: ${{ runner.os }}-sonar
-
-            - name: Setup SonarScanner
-              run: sudo apt-get install sonar-scanner
-
             - name: SonarQube Scan
+              uses: SonarSource/sonarcloud-github-action@master
+              with:
+                  args: >
+                      -Dsonar.projectKey=${{ github.repository }}
+                      -Dsonar.sources=.
               env:
                   SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-              run: |
-                  sonar-scanner \
-                    -Dsonar.projectKey=${{ github.repository }} \
-                    -Dsonar.sources=. \
-                    -Dsonar.host.url=$SONAR_HOST_URL \
-                    -Dsonar.login=$SONAR_TOKEN
