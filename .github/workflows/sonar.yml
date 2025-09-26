@@ -29,13 +29,8 @@ jobs:
                   path: ~/.sonar/cache
                   key: ${{ runner.os }}-sonar
 
-            - name: Install SonarScanner
-              run: |
-                  sudo apt-get update
-                  sudo apt-get install -y wget unzip
-                  wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.9.3.73486-linux.zip
-                  unzip sonar-scanner-cli-4.9.3.73486-linux.zip
-                  export PATH="$PWD/sonar-scanner-4.9.3.73486-linux/bin:$PATH"
+            - name: Setup SonarScanner
+              run: sudo apt-get install sonar-scanner
 
             - name: SonarQube Scan
               env:
